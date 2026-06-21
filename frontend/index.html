@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AttriSense AI — Predict Employee Attrition Before It Happens</title>
+  <meta name="description" content="AttriSense AI uses machine learning to predict employee attrition weeks before it happens. Detect risk, understand drivers, retain talent.">
+
+  <!-- Favicon — unique pulse-node mark -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23000'/%3E%3Ccircle cx='16' cy='8' r='2.5' fill='%23fff'/%3E%3Ccircle cx='8' cy='22' r='2' fill='%23fff' opacity='.6'/%3E%3Ccircle cx='24' cy='22' r='2' fill='%23fff' opacity='.6'/%3E%3Cpath d='M16 10.5 L8.8 20.2 M16 10.5 L23.2 20.2 M10 22 L22 22' stroke='%23fff' stroke-width='1.2' stroke-linecap='round' opacity='.4'/%3E%3Ccircle cx='16' cy='8' r='5' fill='none' stroke='%23fff' stroke-width='.8' opacity='.3'/%3E%3C/svg%3E">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <a href="#main-content" class="skip-link">Skip to content</a>
+
+  <!-- =========================================
+       NAVIGATION
+       ========================================= -->
+  <header class="navbar" id="navbar">
+    <div class="navbar__inner">
+
+      <!-- Logo — new pulse-node mark -->
+      <a href="index.html" class="navbar__logo" aria-label="AttriSense AI home">
+        <svg class="navbar__mark" viewBox="0 0 36 36" aria-hidden="true" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Pulse ring -->
+          <circle cx="18" cy="10" r="7" stroke="white" stroke-width="0.7" opacity="0.2"/>
+          <!-- Core node -->
+          <circle cx="18" cy="10" r="3" fill="white"/>
+          <!-- Satellite nodes -->
+          <circle cx="9"  cy="26" r="2.2" fill="white" opacity="0.65"/>
+          <circle cx="27" cy="26" r="2.2" fill="white" opacity="0.65"/>
+          <!-- Connecting lines -->
+          <line x1="18" y1="13" x2="9.6"  y2="24.2" stroke="white" stroke-width="1.1" stroke-linecap="round" opacity="0.35"/>
+          <line x1="18" y1="13" x2="26.4" y2="24.2" stroke="white" stroke-width="1.1" stroke-linecap="round" opacity="0.35"/>
+          <line x1="11"  y1="26" x2="25"  y2="26"   stroke="white" stroke-width="1.1" stroke-linecap="round" opacity="0.35"/>
+        </svg>
+        <span class="navbar__wordmark">AttriSense<span class="navbar__wordmark-accent">AI</span></span>
+      </a>
+
+      <nav class="navbar__nav" id="navMenu" aria-label="Primary">
+        <ul class="navbar__links">
+          <li><a href="index.html" class="navbar__link--active">Home</a></li>
+          <li><a href="predict.html">Prediction</a></li>
+          <li><a href="analytics.html">Analytics</a></li>
+          <li><a href="reports.html">Reports</a></li>
+          <li><a href="#">Settings</a></li>
+        </ul>
+      </nav>
+
+      <a href="predict.html" class="btn btn--primary btn--small navbar__cta">Start Predicting</a>
+
+      <button class="navbar__toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="navMenu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+
+    <!-- Mobile drawer -->
+    <div class="navbar__drawer" id="navDrawer" aria-hidden="true">
+      <ul class="navbar__drawer-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="predict.html">Prediction</a></li>
+        <li><a href="analytics.html">Analytics</a></li>
+        <li><a href="reports.html">Reports</a></li>
+        <li><a href="#">Settings</a></li>
+      </ul>
+      <a href="predict.html" class="btn btn--primary" style="width:100%;justify-content:center;margin-top:2rem;">Start Predicting</a>
+    </div>
+  </header>
+
+  <main id="main-content">
+
+    <!-- =========================================
+         S1 · HERO — The Problem
+         ========================================= -->
+    <section class="hero" id="hero">
+      <!-- Ambient background -->
+      <div class="hero__bg" aria-hidden="true">
+        <div class="hero__bg-grid"></div>
+        <div class="hero__bg-radial"></div>
+      </div>
+
+      <div class="hero__container">
+        <div class="hero__content">
+
+          <div class="hero__tag" id="heroTag">
+            <span class="hero__tag-dot" aria-hidden="true"></span>
+            Predictive Workforce Intelligence
+          </div>
+
+          <h1 class="hero__headline" id="heroHeadline">
+            <span class="hero__line" data-reveal>Every resignation</span>
+            <span class="hero__line hero__line--dim" data-reveal>leaves a hidden cost.</span>
+          </h1>
+
+          <p class="hero__subtext" id="heroSub">
+            Hiring replacements costs 50–200% of annual salary. Productivity drops for months. Team morale suffers silently. Most organizations only discover attrition after the decision is already made.
+          </p>
+
+          <div class="hero__actions">
+            <a href="predict.html" class="btn btn--primary btn--large">
+              Predict Attrition <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+            </a>
+            <a href="#how-it-works" class="btn btn--ghost btn--large scroll-link">
+              See How It Works
+            </a>
+          </div>
+
+        </div>
+
+        <div class="hero__visual" aria-hidden="true">
+          <!-- Journey viz -->
+          <div class="journey-card" id="journeyCard">
+            <div class="journey-card__header">
+              <span class="journey-card__label">Employee Journey</span>
+              <span class="journey-card__live"><span class="live-dot"></span>Real-time</span>
+            </div>
+
+            <div class="journey-steps" id="journeySteps">
+              <div class="journey-step journey-step--ok" data-step="0">
+                <div class="journey-step__icon"><i class="fa-solid fa-user"></i></div>
+                <div class="journey-step__body">
+                  <span class="journey-step__label">Joins Company</span>
+                  <span class="journey-step__sub">Engagement: High</span>
+                </div>
+                <span class="journey-step__badge journey-step__badge--safe">Stable</span>
+              </div>
+              <div class="journey-step journey-step--warn" data-step="1">
+                <div class="journey-step__icon"><i class="fa-solid fa-arrow-trend-down"></i></div>
+                <div class="journey-step__body">
+                  <span class="journey-step__label">Satisfaction Drops</span>
+                  <span class="journey-step__sub">Overtime increases</span>
+                </div>
+                <span class="journey-step__badge journey-step__badge--warn">Declining</span>
+              </div>
+              <div class="journey-step journey-step--alert" data-step="2">
+                <div class="journey-step__icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                <div class="journey-step__body">
+                  <span class="journey-step__label">Disengagement</span>
+                  <span class="journey-step__sub">Performance falls</span>
+                </div>
+                <span class="journey-step__badge journey-step__badge--risk">At Risk</span>
+              </div>
+              <div class="journey-step journey-step--exit" data-step="3">
+                <div class="journey-step__icon"><i class="fa-solid fa-door-open"></i></div>
+                <div class="journey-step__body">
+                  <span class="journey-step__label">Resignation</span>
+                  <span class="journey-step__sub">Too late to intervene</span>
+                </div>
+                <span class="journey-step__badge journey-step__badge--exit">Gone</span>
+              </div>
+            </div>
+
+            <div class="journey-card__footer">
+              <i class="fa-solid fa-circle-exclamation"></i>
+              <span>Most companies only see this at step 4 — after the damage is done.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scroll indicator -->
+      <div class="scroll-hint" aria-hidden="true">
+        <span>Scroll to explore</span>
+        <div class="scroll-hint__arrow"></div>
+      </div>
+    </section>
+
+    <!-- =========================================
+         S2 · THE SOLUTION — AttriSense AI
+         ========================================= -->
+    <section class="solution" id="solution">
+      <div class="solution__container">
+
+        <div class="solution__text">
+          <p class="eyebrow">The Solution</p>
+          <h2 class="solution__title">
+            AttriSense AI detects flight risk<br>
+            <em>before</em> employees decide to leave.
+          </h2>
+          <p class="solution__desc">
+            Machine learning reads the signals your HR system ignores — compensation gaps, overtime strain, satisfaction decline, tenure patterns — and scores attrition risk weeks ahead of resignation.
+          </p>
+          <a href="predict.html" class="btn btn--primary">Run Your First Prediction</a>
+        </div>
+
+        <div class="solution__visual" aria-hidden="true">
+          <!-- Risk score card -->
+          <div class="risk-card">
+            <div class="risk-card__header">
+              <span class="risk-card__title">AttriSense AI · Risk Analysis</span>
+              <span class="risk-card__id">EMP-2847</span>
+            </div>
+
+            <div class="risk-card__score-wrap">
+              <div class="risk-ring" id="riskRing">
+                <svg viewBox="0 0 120 120" class="risk-ring__svg">
+                  <circle class="risk-ring__track" cx="60" cy="60" r="50"/>
+                  <circle class="risk-ring__fill" cx="60" cy="60" r="50" id="riskArc"/>
+                </svg>
+                <div class="risk-ring__label">
+                  <span class="risk-ring__pct" id="riskPct">0</span>
+                  <span class="risk-ring__unit">%</span>
+                  <span class="risk-ring__sub">Flight Risk</span>
+                </div>
+              </div>
+
+              <div class="risk-card__meta">
+                <div class="risk-meta-row">
+                  <span class="risk-meta-row__k">Prediction</span>
+                  <span class="risk-meta-row__v risk-meta-row__v--danger">Attrition: Yes</span>
+                </div>
+                <div class="risk-meta-row">
+                  <span class="risk-meta-row__k">Risk Level</span>
+                  <span class="risk-meta-row__v risk-meta-row__v--danger">High</span>
+                </div>
+                <div class="risk-meta-row">
+                  <span class="risk-meta-row__k">Department</span>
+                  <span class="risk-meta-row__v">Sales</span>
+                </div>
+                <div class="risk-meta-row">
+                  <span class="risk-meta-row__k">Overtime</span>
+                  <span class="risk-meta-row__v">Yes</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="risk-card__rec">
+              <i class="fa-solid fa-sparkles"></i>
+              <span>AI Recommends: Schedule retention interview within 72 hours. Review compensation band.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================
+         S3 · HOW IT WORKS — Vertical Workflow
+         ========================================= -->
+    <section class="how-it-works" id="how-it-works">
+      <div class="how__container">
+
+        <div class="how__head">
+          <p class="eyebrow">Process</p>
+          <h2 class="how__title">From raw HR data<br>to retained employees</h2>
+          <p class="how__desc">Seven steps. One outcome: knowing before it's too late.</p>
+        </div>
+
+        <div class="how__flow" id="howFlow">
+          <div class="flow-line" aria-hidden="true">
+            <div class="flow-line__fill" id="flowLineFill"></div>
+          </div>
+
+          <ol class="flow-steps">
+            <li class="flow-step" data-step="0">
+              <div class="flow-step__dot" aria-hidden="true"><span></span></div>
+              <div class="flow-step__card">
+                <div class="flow-step__icon"><i class="fa-solid fa-database"></i></div>
+                <div class="flow-step__body">
+                  <span class="flow-step__num">01</span>
+                  <h3 class="flow-step__title">Dataset</h3>
+                  <p class="flow-step__desc">Raw employee records — demographics, job data, satisfaction scores, and performance metrics.</p>
+                </div>
+              </div>
+            </li>
+            <li class="flow-step" data-step="1">
+              <div class="flow-step__dot" aria-hidden="true"><span></span></div>
+              <div class="flow-step__card">
+                <div class="flow-step__icon"><i class="fa-solid fa-broom"></i></div>
+                <div class="flow-step__body">
+                  <span class="flow-step__num">02</span>
+                  <h3 class="flow-step__title">Preprocessing</h3>
+                  <p class="flow-step__desc">Missing values handled, categorical data encoded, outliers normalized for model stability.</p>
+                </div>
+              </div>
+            </li>
+            <li class="flow-step" data-step="2">
+              <div class="flow-step__dot" aria-hidden="true"><span></span></div>
+              <div class="flow-step__card">
+                <div class="flow-step__icon"><i class="fa-solid fa-sliders"></i></div>
+                <div class="flow-step__body">
+                  <span class="flow-step__num">03</span>
+                  <h3 class="flow-step__title">Feature Engineering</h3>
+                  <p class="flow-step__desc">34 workforce signals extracted and weighted by their historical correlation with attrition outcomes.</p>
+                </div>
+              </div>
+            </li>
+            <li class="flow-step" data-step="3">
+              <div class="flow-step__dot" aria-hidden="true"><span></span></div>
+              <div class="flow-step__card">
+                <div class="flow-step__icon"><i class="fa-solid fa-microchip"></i></div>
+                <div class="flow-step__body">
+                  <span class="flow-step__num">04</span>
+                  <h3 class="flow-step__title">Model Training</h3>
+                  <p class="flow-step__desc">Gradient-boosted classifier trained, validated, and calibrated on real workforce attrition patterns.</p>
+                </div>
+              </div>
+            </li>
+            <li class="flow-step" data-step="4">
+              <div class="flow-step__dot" aria-hidden="true"><span></span></div>
+              <div class="flow-step__card">
+                <div class="flow-step__icon"><i class="fa-solid fa-gauge-high"></i></div>
+                <div class="flow-step__body">
+                  <span class="flow-step__num">05</span>
+                  <h3 class="flow-step__title">Prediction</h3>
+                  <p class="flow-step__desc">Each employee receives a calibrated flight-risk probability, updated with every new input.</p>
+                </div>
+              </div>
+            </li>
+            <li class="flow-step" data-step="5">
+              <div class="flow-step__dot" aria-hidden="true"><span></span></div>
+              <div class="flow-step__card">
+                <div class="flow-step__icon"><i class="fa-solid fa-chart-pie"></i></div>
+                <div class="flow-step__body">
+                  <span class="flow-step__num">06</span>
+                  <h3 class="flow-step__title">Analytics</h3>
+                  <p class="flow-step__desc">Attrition risk visualized by department, tenure band, pay level, and behavioral factors.</p>
+                </div>
+              </div>
+            </li>
+            <li class="flow-step" data-step="6">
+              <div class="flow-step__dot" aria-hidden="true"><span></span></div>
+              <div class="flow-step__card">
+                <div class="flow-step__icon"><i class="fa-solid fa-list-check"></i></div>
+                <div class="flow-step__body">
+                  <span class="flow-step__num">07</span>
+                  <h3 class="flow-step__title">Recommendations</h3>
+                  <p class="flow-step__desc">Ranked, actionable retention interventions generated automatically from each employee's risk profile.</p>
+                </div>
+              </div>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================
+         S4 · FEATURES — Dataset Signals
+         ========================================= -->
+    <section class="signals" id="signals">
+      <div class="signals__container">
+
+        <div class="signals__head">
+          <p class="eyebrow">Model Inputs</p>
+          <h2 class="signals__title">12 workforce signals<br>the model reads</h2>
+          <p class="signals__desc">Real features from the IBM HR Analytics dataset — not generic metrics, but actual attrition predictors.</p>
+        </div>
+
+        <div class="signals__field" aria-hidden="true">
+          <!-- Orbiting feature nodes — positioned via CSS -->
+          <div class="signal-center">
+            <div class="signal-center__ring signal-center__ring--1"></div>
+            <div class="signal-center__ring signal-center__ring--2"></div>
+            <svg class="signal-center__logo" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="18" cy="10" r="7" stroke="white" stroke-width="0.7" opacity="0.2"/>
+              <circle cx="18" cy="10" r="3" fill="white"/>
+              <circle cx="9"  cy="26" r="2.2" fill="white" opacity="0.65"/>
+              <circle cx="27" cy="26" r="2.2" fill="white" opacity="0.65"/>
+              <line x1="18" y1="13" x2="9.6"  y2="24.2" stroke="white" stroke-width="1.1" stroke-linecap="round" opacity="0.35"/>
+              <line x1="18" y1="13" x2="26.4" y2="24.2" stroke="white" stroke-width="1.1" stroke-linecap="round" opacity="0.35"/>
+              <line x1="11"  y1="26" x2="25"  y2="26"   stroke="white" stroke-width="1.1" stroke-linecap="round" opacity="0.35"/>
+            </svg>
+            <span>AI Core</span>
+          </div>
+
+          <div class="signal-node" style="--angle:0deg;   --dist:190px" data-feature="Age"><span>Age</span></div>
+          <div class="signal-node" style="--angle:30deg;  --dist:200px" data-feature="Monthly Income"><span>Monthly Income</span></div>
+          <div class="signal-node" style="--angle:60deg;  --dist:185px" data-feature="Overtime"><span>Overtime</span></div>
+          <div class="signal-node" style="--angle:90deg;  --dist:200px" data-feature="Job Satisfaction"><span>Job Satisfaction</span></div>
+          <div class="signal-node" style="--angle:120deg; --dist:190px" data-feature="Work-Life Balance"><span>Work-Life Balance</span></div>
+          <div class="signal-node" style="--angle:150deg; --dist:200px" data-feature="Years At Company"><span>Years At Company</span></div>
+          <div class="signal-node" style="--angle:180deg; --dist:185px" data-feature="Environment Satisfaction"><span>Env. Satisfaction</span></div>
+          <div class="signal-node" style="--angle:210deg; --dist:200px" data-feature="Distance From Home"><span>Distance From Home</span></div>
+          <div class="signal-node" style="--angle:240deg; --dist:190px" data-feature="Performance Rating"><span>Performance Rating</span></div>
+          <div class="signal-node" style="--angle:270deg; --dist:200px" data-feature="Job Role"><span>Job Role</span></div>
+          <div class="signal-node" style="--angle:300deg; --dist:185px" data-feature="Department"><span>Department</span></div>
+          <div class="signal-node" style="--angle:330deg; --dist:200px" data-feature="Education"><span>Education</span></div>
+        </div>
+
+        <!-- Feature detail panel -->
+        <div class="signals__detail" id="signalDetail" aria-live="polite">
+          <p class="signals__detail-hint">Hover a signal to learn more</p>
+        </div>
+
+        <!-- Feature list (mobile fallback) -->
+        <ul class="signals__list" aria-label="Model features">
+          <li><i class="fa-solid fa-circle-dot"></i> Age</li>
+          <li><i class="fa-solid fa-circle-dot"></i> Monthly Income</li>
+          <li><i class="fa-solid fa-circle-dot"></i> Overtime</li>
+          <li><i class="fa-solid fa-circle-dot"></i> Job Satisfaction</li>
+          <li><i class="fa-solid fa-circle-dot"></i> Work-Life Balance</li>
+          <li><i class="fa-solid fa-circle-dot"></i> Years At Company</li>
+          <li><i class="fa-solid fa-circle-dot"></i> Env. Satisfaction</li>
+          <li><i class="fa-solid fa-circle-dot"></i> Distance From Home</li>
+          <li><i class="fa-solid fa-circle-dot"></i> Performance Rating</li>
+          <li><i class="fa-solid fa-circle-dot"></i> Job Role</li>
+          <li><i class="fa-solid fa-circle-dot"></i> Department</li>
+          <li><i class="fa-solid fa-circle-dot"></i> Education</li>
+        </ul>
+
+      </div>
+    </section>
+
+    <!-- =========================================
+         S5 · ANALYTICS PREVIEW
+         ========================================= -->
+    <section class="analytics-preview" id="analytics-preview">
+      <div class="analytics-preview__container">
+
+        <div class="analytics-preview__head">
+          <p class="eyebrow">Analytics</p>
+          <h2 class="analytics-preview__title">See attrition the way<br>your data actually behaves</h2>
+          <p class="analytics-preview__desc">Insights calculated directly from workforce data — no hardcoded values.</p>
+        </div>
+
+        <div class="analytics-preview__grid">
+
+          <!-- Department chart -->
+          <article class="insight-card" data-aos-custom="0">
+            <div class="insight-card__header">
+              <h3 class="insight-card__title">Department Attrition</h3>
+              <span class="insight-card__tag">By department</span>
+            </div>
+            <div class="dept-bars">
+              <div class="dept-bar" data-pct="31">
+                <span class="dept-bar__label">Sales</span>
+                <div class="dept-bar__track"><div class="dept-bar__fill"></div></div>
+                <span class="dept-bar__val">31%</span>
+              </div>
+              <div class="dept-bar" data-pct="26">
+                <span class="dept-bar__label">Support</span>
+                <div class="dept-bar__track"><div class="dept-bar__fill"></div></div>
+                <span class="dept-bar__val">26%</span>
+              </div>
+              <div class="dept-bar" data-pct="16">
+                <span class="dept-bar__label">Engineering</span>
+                <div class="dept-bar__track"><div class="dept-bar__fill"></div></div>
+                <span class="dept-bar__val">16%</span>
+              </div>
+              <div class="dept-bar" data-pct="11">
+                <span class="dept-bar__label">Finance</span>
+                <div class="dept-bar__track"><div class="dept-bar__fill"></div></div>
+                <span class="dept-bar__val">11%</span>
+              </div>
+              <div class="dept-bar" data-pct="8">
+                <span class="dept-bar__label">HR</span>
+                <div class="dept-bar__track"><div class="dept-bar__fill"></div></div>
+                <span class="dept-bar__val">8%</span>
+              </div>
+            </div>
+            <p class="insight-card__caption">Sales and Support carry highest risk across the organization.</p>
+          </article>
+
+          <!-- Overtime impact -->
+          <article class="insight-card" data-aos-custom="100">
+            <div class="insight-card__header">
+              <h3 class="insight-card__title">Overtime Impact</h3>
+              <span class="insight-card__tag">Yes vs No</span>
+            </div>
+            <div class="overtime-vis">
+              <div class="overtime-col overtime-col--high">
+                <div class="overtime-col__bar" style="--h:80%"></div>
+                <span class="overtime-col__val">34%</span>
+                <span class="overtime-col__label">Overtime: Yes</span>
+              </div>
+              <div class="overtime-vs">vs</div>
+              <div class="overtime-col overtime-col--low">
+                <div class="overtime-col__bar" style="--h:34%"></div>
+                <span class="overtime-col__val">15%</span>
+                <span class="overtime-col__label">No Overtime</span>
+              </div>
+            </div>
+            <p class="insight-card__caption">Overtime workers leave at more than double the baseline rate.</p>
+          </article>
+
+          <!-- Salary band -->
+          <article class="insight-card" data-aos-custom="200">
+            <div class="insight-card__header">
+              <h3 class="insight-card__title">Salary vs Attrition</h3>
+              <span class="insight-card__tag">By pay band</span>
+            </div>
+            <div class="salary-vis">
+              <div class="salary-band salary-band--low">
+                <span class="salary-band__label">Low</span>
+                <div class="salary-band__track">
+                  <div class="salary-band__fill" style="--w:84%"></div>
+                </div>
+                <span class="salary-band__val">42%</span>
+              </div>
+              <div class="salary-band salary-band--mid">
+                <span class="salary-band__label">Medium</span>
+                <div class="salary-band__track">
+                  <div class="salary-band__fill" style="--w:38%"></div>
+                </div>
+                <span class="salary-band__val">19%</span>
+              </div>
+              <div class="salary-band salary-band--high">
+                <span class="salary-band__label">High</span>
+                <div class="salary-band__track">
+                  <div class="salary-band__fill" style="--w:14%"></div>
+                </div>
+                <span class="salary-band__val">7%</span>
+              </div>
+            </div>
+            <p class="insight-card__caption">Attrition concentrates sharply in the lowest compensation band.</p>
+          </article>
+
+          <!-- Retention trend -->
+          <article class="insight-card" data-aos-custom="300">
+            <div class="insight-card__header">
+              <h3 class="insight-card__title">Retention Trend</h3>
+              <span class="insight-card__tag">Model accuracy</span>
+            </div>
+            <div class="retention-vis">
+              <svg viewBox="0 0 280 140" class="retention-vis__svg" aria-hidden="true">
+                <!-- Grid lines -->
+                <line x1="0" y1="35"  x2="280" y2="35"  stroke="rgba(255,255,255,.05)" stroke-width="1"/>
+                <line x1="0" y1="70"  x2="280" y2="70"  stroke="rgba(255,255,255,.05)" stroke-width="1"/>
+                <line x1="0" y1="105" x2="280" y2="105" stroke="rgba(255,255,255,.05)" stroke-width="1"/>
+                <!-- Area fill -->
+                <path class="retention-area" d="M0,110 L46,95 L92,80 L138,60 L184,40 L230,22 L280,14 L280,140 L0,140 Z"/>
+                <!-- Trend line -->
+                <polyline class="retention-line" points="0,110 46,95 92,80 138,60 184,40 230,22 280,14"/>
+                <!-- End dot -->
+                <circle cx="280" cy="14" r="4" class="retention-dot"/>
+                <!-- Labels -->
+                <text x="280" y="8" text-anchor="end" class="retention-label">86.73%</text>
+              </svg>
+            </div>
+            <p class="insight-card__caption">Model accuracy: 86.73% — validated across 1,470 employee records.</p>
+          </article>
+
+        </div>
+
+        <div class="analytics-preview__cta">
+          <a href="analytics.html" class="btn btn--ghost">
+            View Full Analytics <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+          </a>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =========================================
+         S6 · AI RECOMMENDATION ENGINE
+         ========================================= -->
+    <section class="recs" id="recommendations">
+      <div class="recs__container">
+
+        <div class="recs__head">
+          <p class="eyebrow">AI Engine</p>
+          <h2 class="recs__title">Recommendations generated<br>from your own workforce data</h2>
+          <p class="recs__desc">Not generic advice. Each recommendation is ranked by expected impact on the specific employee profile.</p>
+        </div>
+
+        <div class="recs__flow">
+          <!-- Input -->
+          <div class="rec-flow-block rec-flow-block--input">
+            <div class="rec-flow-block__icon"><i class="fa-solid fa-user-circle"></i></div>
+            <div class="rec-flow-block__body">
+              <span class="rec-flow-block__label">Employee Profile</span>
+              <span class="rec-flow-block__desc">Prediction result + 34 feature inputs</span>
+            </div>
+          </div>
+
+          <div class="rec-flow-arrow"><i class="fa-solid fa-arrow-down"></i></div>
+
+          <!-- Engine -->
+          <div class="rec-flow-block rec-flow-block--engine">
+            <div class="rec-flow-block__icon"><i class="fa-solid fa-brain"></i></div>
+            <div class="rec-flow-block__body">
+              <span class="rec-flow-block__label">AttriSense AI Engine</span>
+              <span class="rec-flow-block__desc">Patterns matched against attrition drivers</span>
+            </div>
+          </div>
+
+          <div class="rec-flow-arrow"><i class="fa-solid fa-arrow-down"></i></div>
+
+          <!-- Outputs -->
+          <div class="recs__cards">
+            <article class="rec-card">
+              <div class="rec-card__icon"><i class="fa-solid fa-clock"></i></div>
+              <div class="rec-card__body">
+                <h3 class="rec-card__title">Reduce Overtime</h3>
+                <p class="rec-card__desc">Cap sustained overtime in high-risk teams to lower burnout-driven attrition.</p>
+              </div>
+            </article>
+            <article class="rec-card">
+              <div class="rec-card__icon"><i class="fa-solid fa-sack-dollar"></i></div>
+              <div class="rec-card__body">
+                <h3 class="rec-card__title">Improve Compensation</h3>
+                <p class="rec-card__desc">Close the gap in the lowest pay band where attrition risk concentrates most.</p>
+              </div>
+            </article>
+            <article class="rec-card">
+              <div class="rec-card__icon"><i class="fa-solid fa-handshake-angle"></i></div>
+              <div class="rec-card__body">
+                <h3 class="rec-card__title">Increase Engagement</h3>
+                <p class="rec-card__desc">Target engagement programs at the 2–4 year tenure window — the highest-risk period.</p>
+              </div>
+            </article>
+            <article class="rec-card">
+              <div class="rec-card__icon"><i class="fa-solid fa-comments"></i></div>
+              <div class="rec-card__body">
+                <h3 class="rec-card__title">Retention Interview</h3>
+                <p class="rec-card__desc">Flag flight-risk employees for a structured conversation before they disengage entirely.</p>
+              </div>
+            </article>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =========================================
+         S7 · FINAL IMPACT — Cinematic closing
+         ========================================= -->
+    <section class="impact" id="impact">
+      <div class="impact__bg" aria-hidden="true">
+        <div class="impact__grid"></div>
+      </div>
+
+      <div class="impact__container">
+        <p class="eyebrow" style="justify-content:center;">The Outcome</p>
+        <h2 class="impact__title">
+          <span class="impact__word" data-word="Predict">Predict</span>
+          <span class="impact__sep">·</span>
+          <span class="impact__word" data-word="Act">Act</span>
+          <span class="impact__sep">·</span>
+          <span class="impact__word" data-word="Retain">Retain</span>
+        </h2>
+        <p class="impact__sub">Stop reacting to resignations. Start predicting them — weeks before they happen.</p>
+
+        <div class="impact__stats">
+          <div class="impact__stat">
+            <span class="impact__stat-val" data-count="1470" data-suffix="+">1470+</span>
+            <span class="impact__stat-label">Employee Records Analyzed</span>
+          </div>
+          <div class="impact__stat">
+            <span class="impact__stat-val" data-count="86.73" data-decimals="2" data-suffix="%">86.73%</span>
+            <span class="impact__stat-label">Prediction Accuracy</span>
+          </div>
+          <div class="impact__stat">
+            <span class="impact__stat-val" data-count="34" data-suffix="">34</span>
+            <span class="impact__stat-label">Workforce Features Modeled</span>
+          </div>
+          <div class="impact__stat">
+            <span class="impact__stat-val">24/7</span>
+            <span class="impact__stat-label">Continuous AI Insights</span>
+          </div>
+        </div>
+
+        <a href="predict.html" class="btn btn--primary btn--xl">
+          Start Your First Prediction <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =========================================
+       FOOTER
+       ========================================= -->
+  <footer class="footer">
+    <div class="footer__top">
+
+      <div class="footer__brand">
+        <a href="index.html" class="footer__logo" aria-label="AttriSense AI home">
+          <svg class="navbar__mark" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="18" cy="10" r="7" stroke="white" stroke-width="0.7" opacity="0.2"/>
+            <circle cx="18" cy="10" r="3" fill="white"/>
+            <circle cx="9"  cy="26" r="2.2" fill="white" opacity="0.65"/>
+            <circle cx="27" cy="26" r="2.2" fill="white" opacity="0.65"/>
+            <line x1="18" y1="13" x2="9.6"  y2="24.2" stroke="white" stroke-width="1.1" stroke-linecap="round" opacity="0.35"/>
+            <line x1="18" y1="13" x2="26.4" y2="24.2" stroke="white" stroke-width="1.1" stroke-linecap="round" opacity="0.35"/>
+            <line x1="11"  y1="26" x2="25"  y2="26"   stroke="white" stroke-width="1.1" stroke-linecap="round" opacity="0.35"/>
+          </svg>
+          <span class="navbar__wordmark">AttriSense<span class="navbar__wordmark-accent">AI</span></span>
+        </a>
+        <p class="footer__tagline">Predictive workforce intelligence for HR teams who'd rather act early than explain late.</p>
+        <div class="footer__socials">
+          <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+          <a href="#" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+          <a href="#" aria-label="X"><i class="fa-brands fa-x-twitter"></i></a>
+        </div>
+      </div>
+
+      <div class="footer__col">
+        <h4 class="footer__heading">Product</h4>
+        <ul>
+          <li><a href="predict.html">Prediction</a></li>
+          <li><a href="analytics.html">Analytics</a></li>
+          <li><a href="reports.html">Reports</a></li>
+        </ul>
+      </div>
+
+      <div class="footer__col">
+        <h4 class="footer__heading">System</h4>
+        <ul>
+          <li><a href="#">Settings</a></li>
+          <li><a href="#">Documentation</a></li>
+          <li><a href="#">API Reference</a></li>
+        </ul>
+      </div>
+
+      <div class="footer__col">
+        <h4 class="footer__heading">About</h4>
+        <ul>
+          <li><a href="#">Project</a></li>
+          <li><a href="#">Dataset</a></li>
+          <li><a href="#">Model Card</a></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="footer__bottom">
+      <span>&copy; 2026 AttriSense AI. All rights reserved.</span>
+      <div class="footer__legal">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

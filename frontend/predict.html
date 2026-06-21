@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Employee Risk Assessment — AttriSense AI</title>
+  <meta name="description" content="AI-powered employee attrition risk assessment workspace.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23000'/%3E%3Ccircle cx='16' cy='9' r='3' fill='%23fff'/%3E%3Ccircle cx='8' cy='23' r='3' fill='%23fff'/%3E%3Ccircle cx='24' cy='23' r='3' fill='%23fff'/%3E%3Cline x1='16' y1='9' x2='8' y2='23' stroke='%23fff' stroke-width='1.5'/%3E%3Cline x1='16' y1='9' x2='24' y2='23' stroke='%23fff' stroke-width='1.5'/%3E%3Cline x1='8' y1='23' x2='24' y2='23' stroke='%23fff' stroke-width='1.5'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.1/aos.css">
+  <link rel="stylesheet" href="prediction.css">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar" id="navbar" role="banner">
+    <div class="navbar__inner">
+      <a href="index.html" class="navbar__logo" aria-label="AttriSense AI home">
+        <svg class="navbar__mark" viewBox="0 0 32 32" aria-hidden="true">
+          <circle cx="16" cy="9" r="2.6"></circle>
+          <circle cx="7"  cy="24" r="2.6"></circle>
+          <circle cx="25" cy="24" r="2.6"></circle>
+          <line x1="16" y1="9"  x2="7"  y2="24"></line>
+          <line x1="16" y1="9"  x2="25" y2="24"></line>
+          <line x1="7"  y1="24" x2="25" y2="24"></line>
+        </svg>
+        <span class="navbar__brand">AttriSense<span class="navbar__brand-ai">AI</span></span>
+      </a>
+      <nav class="navbar__nav" aria-label="Primary navigation">
+        <ul class="navbar__list" role="list">
+          <li><a href="index.html"     class="navbar__link">Home</a></li>
+          <li><a href="predict.html"   class="navbar__link navbar__link--active" aria-current="page">Prediction</a></li>
+          <li><a href="analytics.html" class="navbar__link">Analytics</a></li>
+          <li><a href="reports.html"   class="navbar__link">Reports</a></li>
+          <li><a href="#"              class="navbar__link">Settings</a></li>
+        </ul>
+        <div class="navbar__indicator" id="navIndicator" aria-hidden="true"></div>
+      </nav>
+      <div class="navbar__actions">
+        <button class="navbar__action-btn" aria-label="Search"><i class="fa-solid fa-magnifying-glass"></i></button>
+        <button class="navbar__action-btn" aria-label="Notifications"><i class="fa-regular fa-bell"></i><span class="navbar__notif-dot"></span></button>
+        <button class="navbar__avatar" aria-label="User profile"><span>HR</span></button>
+      </div>
+      <button class="navbar__hamburger" id="navHamburger" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="navbar__mobile-menu" id="mobileMenu" aria-hidden="true">
+      <nav aria-label="Mobile navigation">
+        <ul class="navbar__mobile-list" role="list">
+          <li><a href="index.html"     class="navbar__mobile-link">Home</a></li>
+          <li><a href="predict.html"   class="navbar__mobile-link navbar__mobile-link--active">Prediction</a></li>
+          <li><a href="analytics.html" class="navbar__mobile-link">Analytics</a></li>
+          <li><a href="reports.html"   class="navbar__mobile-link">Reports</a></li>
+          <li><a href="#"              class="navbar__mobile-link">Settings</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- MAIN WORKSPACE -->
+  <main class="workspace" id="main-content">
+
+    <!-- Workspace Header -->
+    <div class="workspace__header" data-aos="fade-down" data-aos-duration="500">
+      <div class="workspace__header-left">
+        <div class="workspace__breadcrumb">
+          <a href="index.html" class="workspace__breadcrumb-link">Workspace</a>
+          <i class="fa-solid fa-chevron-right workspace__breadcrumb-sep" aria-hidden="true"></i>
+          <span>Employee Risk Assessment</span>
+        </div>
+        <h1 class="workspace__title">Employee Risk Assessment</h1>
+        <p class="workspace__subtitle">Enter complete employee data — all 30 model features — for the most accurate attrition risk prediction.</p>
+      </div>
+      <div class="workspace__header-right">
+        <div class="status-badge" id="analysisBadge">
+          <span class="status-badge__dot status-badge__dot--idle" id="statusDot" aria-hidden="true"></span>
+          <span class="status-badge__text" id="statusText">Ready for Input</span>
+        </div>
+        <div class="workspace__timestamp">
+          <i class="fa-regular fa-clock" aria-hidden="true"></i>
+          <span id="lastUpdated">Not yet analyzed</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Two-column Layout -->
+    <div class="workspace__body">
+
+      <!-- LEFT: FORM COLUMN -->
+      <div class="workspace__form-col">
+
+        <form class="prediction-form" id="predictionForm" method="POST" action="/predict" novalidate data-aos="fade-up" data-aos-delay="100">
+
+          <!-- ═══ SECTION A: Personal Information ═══════════════════ -->
+          <fieldset class="form-section" id="sectionA">
+            <legend class="form-section__legend">
+              <span class="form-section__index">A</span>
+              Personal Information
+            </legend>
+            <div class="form-grid form-grid--2">
+
+              <div class="field">
+                <label for="age" class="field__label field__label--static">Age</label>
+                <input type="number" id="age" name="age" class="field__input" min="18" max="65" placeholder="e.g. 32" required aria-required="true" aria-describedby="age-hint">
+                <span class="field__hint" id="age-hint">18 – 65</span>
+              </div>
+
+              <div class="field">
+                <label for="gender" class="field__label field__label--static">Gender</label>
+                <select id="gender" name="gender" class="field__input field__input--select" required aria-required="true">
+                  <option value="" disabled selected>Select gender</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="maritalStatus" class="field__label field__label--static">Marital Status</label>
+                <select id="maritalStatus" name="maritalStatus" class="field__input field__input--select" required aria-required="true">
+                  <option value="" disabled selected>Select status</option>
+                  <option value="Single">Single</option>
+                  <option value="Married">Married</option>
+                  <option value="Divorced">Divorced</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="distanceFromHome" class="field__label field__label--static">Distance From Home</label>
+                <input type="number" id="distanceFromHome" name="distanceFromHome" class="field__input" min="1" max="100" placeholder="e.g. 15" required aria-required="true" aria-describedby="dist-hint">
+                <span class="field__hint" id="dist-hint">kilometers</span>
+              </div>
+
+            </div>
+          </fieldset>
+
+          <!-- ═══ SECTION B: Professional Information ════════════════ -->
+          <fieldset class="form-section" id="sectionB">
+            <legend class="form-section__legend">
+              <span class="form-section__index">B</span>
+              Professional Information
+            </legend>
+            <div class="form-grid form-grid--2">
+
+              <div class="field">
+                <label for="department" class="field__label field__label--static">Department</label>
+                <select id="department" name="department" class="field__input field__input--select" required aria-required="true">
+                  <option value="" disabled selected>Select department</option>
+                  <option value="Sales">Sales</option>
+                  <option value="Research &amp; Development">Research &amp; Development</option>
+                  <option value="Human Resources">Human Resources</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="jobRole" class="field__label field__label--static">Job Role</label>
+                <select id="jobRole" name="jobRole" class="field__input field__input--select" required aria-required="true">
+                  <option value="" disabled selected>Select role</option>
+                  <option value="Sales Executive">Sales Executive</option>
+                  <option value="Research Scientist">Research Scientist</option>
+                  <option value="Laboratory Technician">Laboratory Technician</option>
+                  <option value="Manufacturing Director">Manufacturing Director</option>
+                  <option value="Healthcare Representative">Healthcare Representative</option>
+                  <option value="Manager">Manager</option>
+                  <option value="Sales Representative">Sales Representative</option>
+                  <option value="Research Director">Research Director</option>
+                  <option value="Human Resources">Human Resources</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="jobLevel" class="field__label field__label--static">Job Level</label>
+                <select id="jobLevel" name="jobLevel" class="field__input field__input--select" required aria-required="true">
+                  <option value="" disabled selected>Select level</option>
+                  <option value="1">Level 1 — Entry</option>
+                  <option value="2">Level 2 — Junior</option>
+                  <option value="3">Level 3 — Mid</option>
+                  <option value="4">Level 4 — Senior</option>
+                  <option value="5">Level 5 — Executive</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="jobInvolvement" class="field__label field__label--static">Job Involvement</label>
+                <select id="jobInvolvement" name="jobInvolvement" class="field__input field__input--select" required aria-required="true">
+                  <option value="" disabled selected>Select level</option>
+                  <option value="1">1 — Low</option>
+                  <option value="2">2 — Medium</option>
+                  <option value="3">3 — High</option>
+                  <option value="4">4 — Very High</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="businessTravel" class="field__label field__label--static">Business Travel</label>
+                <select id="businessTravel" name="businessTravel" class="field__input field__input--select" required aria-required="true">
+                  <option value="" disabled selected>Select frequency</option>
+                  <option value="Non-Travel">Non-Travel</option>
+                  <option value="Travel_Rarely">Travel Rarely</option>
+                  <option value="Travel_Frequently">Travel Frequently</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="educationField" class="field__label field__label--static">Education Field</label>
+                <select id="educationField" name="educationField" class="field__input field__input--select" required aria-required="true">
+                  <option value="" disabled selected>Select field</option>
+                  <option value="Life Sciences">Life Sciences</option>
+                  <option value="Medical">Medical</option>
+                  <option value="Marketing">Marketing</option>
+                  <option value="Technical Degree">Technical Degree</option>
+                  <option value="Human Resources">Human Resources</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="education" class="field__label field__label--static">Education Level</label>
+                <select id="education" name="education" class="field__input field__input--select" required aria-required="true">
+                  <option value="" disabled selected>Select level</option>
+                  <option value="1">1 — Below College</option>
+                  <option value="2">2 — College</option>
+                  <option value="3">3 — Bachelor</option>
+                  <option value="4">4 — Master</option>
+                  <option value="5">5 — Doctor</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="numCompaniesWorked" class="field__label field__label--static">Companies Worked At</label>
+                <input type="number" id="numCompaniesWorked" name="numCompaniesWorked" class="field__input" min="0" max="20" placeholder="e.g. 3" required aria-required="true" aria-describedby="ncw-hint">
+                <span class="field__hint" id="ncw-hint">0 – 20</span>
+              </div>
+
+            </div>
+          </fieldset>
+
+          <!-- ═══ SECTION C: Compensation ════════════════════════════ -->
+          <fieldset class="form-section" id="sectionC">
+            <legend class="form-section__legend">
+              <span class="form-section__index">C</span>
+              Compensation
+            </legend>
+            <div class="form-grid form-grid--2">
+
+              <div class="field">
+                <label for="monthlyIncome" class="field__label field__label--static">Monthly Income (USD)</label>
+                <div class="field__prefix-wrap">
+                  <span class="field__prefix" aria-hidden="true">$</span>
+                  <input type="number" id="monthlyIncome" name="monthlyIncome" class="field__input field__input--prefixed" min="1000" max="50000" placeholder="e.g. 6500" required aria-required="true">
+                </div>
+                <span class="field__hint">USD / month</span>
+              </div>
+
+              <div class="field">
+                <label for="monthlyRate" class="field__label field__label--static">Monthly Rate</label>
+                <div class="field__prefix-wrap">
+                  <span class="field__prefix" aria-hidden="true">$</span>
+                  <input type="number" id="monthlyRate" name="monthlyRate" class="field__input field__input--prefixed" min="2000" max="27000" placeholder="e.g. 14000" required aria-required="true">
+                </div>
+                <span class="field__hint">Gross rate (2,000–27,000)</span>
+              </div>
+
+              <div class="field">
+                <label for="dailyRate" class="field__label field__label--static">Daily Rate</label>
+                <div class="field__prefix-wrap">
+                  <span class="field__prefix" aria-hidden="true">$</span>
+                  <input type="number" id="dailyRate" name="dailyRate" class="field__input field__input--prefixed" min="100" max="1500" placeholder="e.g. 800" required aria-required="true">
+                </div>
+                <span class="field__hint">100 – 1,500</span>
+              </div>
+
+              <div class="field">
+                <label for="hourlyRate" class="field__label field__label--static">Hourly Rate</label>
+                <div class="field__prefix-wrap">
+                  <span class="field__prefix" aria-hidden="true">$</span>
+                  <input type="number" id="hourlyRate" name="hourlyRate" class="field__input field__input--prefixed" min="30" max="100" placeholder="e.g. 65" required aria-required="true">
+                </div>
+                <span class="field__hint">30 – 100</span>
+              </div>
+
+              <div class="field">
+                <label for="percentSalaryHike" class="field__label field__label--static">Salary Hike %</label>
+                <input type="number" id="percentSalaryHike" name="percentSalaryHike" class="field__input" min="0" max="25" placeholder="e.g. 12" required aria-required="true">
+                <span class="field__hint">Last cycle increase (0–25)</span>
+              </div>
+
+              <div class="field">
+                <label for="stockOptionLevel" class="field__label field__label--static">Stock Option Level</label>
+                <select id="stockOptionLevel" name="stockOptionLevel" class="field__input field__input--select" required aria-required="true">
+                  <option value="" disabled selected>Select level</option>
+                  <option value="0">0 — None</option>
+                  <option value="1">1 — Basic</option>
+                  <option value="2">2 — Standard</option>
+                  <option value="3">3 — Premium</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="performanceRating" class="field__label field__label--static">Performance Rating</label>
+                <select id="performanceRating" name="performanceRating" class="field__input field__input--select" required aria-required="true">
+                  <option value="" disabled selected>Select rating</option>
+                  <option value="1">1 — Low</option>
+                  <option value="2">2 — Good</option>
+                  <option value="3">3 — Excellent</option>
+                  <option value="4">4 — Outstanding</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="trainingTimesLastYear" class="field__label field__label--static">Training Times Last Year</label>
+                <input type="number" id="trainingTimesLastYear" name="trainingTimesLastYear" class="field__input" min="0" max="6" placeholder="e.g. 3" required aria-required="true">
+                <span class="field__hint">0 – 6 sessions</span>
+              </div>
+
+            </div>
+          </fieldset>
+
+          <!-- ═══ SECTION D: Work Environment & Satisfaction ══════════ -->
+          <fieldset class="form-section" id="sectionD">
+            <legend class="form-section__legend">
+              <span class="form-section__index">D</span>
+              Work Environment &amp; Satisfaction
+            </legend>
+            <div class="form-grid form-grid--2">
+
+              <div class="field">
+                <label for="overtime" class="field__label field__label--static">Overtime</label>
+                <select id="overtime" name="overtime" class="field__input field__input--select" required aria-required="true">
+                  <option value="" disabled selected>Select</option>
+                  <option value="Yes">Yes</option>
+                  <option value="No">No</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="workLifeBalance" class="field__label field__label--static">Work-Life Balance</label>
+                <select id="workLifeBalance" name="workLifeBalance" class="field__input field__input--select" required aria-required="true">
+                  <option value="" disabled selected>Select rating</option>
+                  <option value="1">1 — Poor</option>
+                  <option value="2">2 — Fair</option>
+                  <option value="3">3 — Good</option>
+                  <option value="4">4 — Excellent</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="environmentSatisfaction" class="field__label field__label--static">Environment Satisfaction</label>
+                <select id="environmentSatisfaction" name="environmentSatisfaction" class="field__input field__input--select" required aria-required="true">
+                  <option value="" disabled selected>Select rating</option>
+                  <option value="1">1 — Low</option>
+                  <option value="2">2 — Medium</option>
+                  <option value="3">3 — High</option>
+                  <option value="4">4 — Very High</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="jobSatisfaction" class="field__label field__label--static">Job Satisfaction</label>
+                <select id="jobSatisfaction" name="jobSatisfaction" class="field__input field__input--select" required aria-required="true">
+                  <option value="" disabled selected>Select rating</option>
+                  <option value="1">1 — Low</option>
+                  <option value="2">2 — Medium</option>
+                  <option value="3">3 — High</option>
+                  <option value="4">4 — Very High</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="relationshipSatisfaction" class="field__label field__label--static">Relationship Satisfaction</label>
+                <select id="relationshipSatisfaction" name="relationshipSatisfaction" class="field__input field__input--select" required aria-required="true">
+                  <option value="" disabled selected>Select rating</option>
+                  <option value="1">1 — Low</option>
+                  <option value="2">2 — Medium</option>
+                  <option value="3">3 — High</option>
+                  <option value="4">4 — Very High</option>
+                </select>
+              </div>
+
+            </div>
+          </fieldset>
+
+          <!-- ═══ SECTION E: Tenure & Experience ═════════════════════ -->
+          <fieldset class="form-section" id="sectionE">
+            <legend class="form-section__legend">
+              <span class="form-section__index">E</span>
+              Tenure &amp; Experience
+            </legend>
+            <div class="form-grid form-grid--2">
+
+              <div class="field">
+                <label for="totalWorkingYears" class="field__label field__label--static">Total Working Years</label>
+                <input type="number" id="totalWorkingYears" name="totalWorkingYears" class="field__input" min="0" max="40" placeholder="e.g. 8" required aria-required="true">
+                <span class="field__hint">0 – 40 years</span>
+              </div>
+
+              <div class="field">
+                <label for="yearsAtCompany" class="field__label field__label--static">Years at Company</label>
+                <input type="number" id="yearsAtCompany" name="yearsAtCompany" class="field__input" min="0" max="40" placeholder="e.g. 5" required aria-required="true">
+                <span class="field__hint">0 – 40 years</span>
+              </div>
+
+              <div class="field">
+                <label for="yearsInCurrentRole" class="field__label field__label--static">Years in Current Role</label>
+                <input type="number" id="yearsInCurrentRole" name="yearsInCurrentRole" class="field__input" min="0" max="20" placeholder="e.g. 3" required aria-required="true">
+                <span class="field__hint">0 – 20 years</span>
+              </div>
+
+              <div class="field">
+                <label for="yearsSinceLastPromotion" class="field__label field__label--static">Years Since Last Promotion</label>
+                <input type="number" id="yearsSinceLastPromotion" name="yearsSinceLastPromotion" class="field__input" min="0" max="15" placeholder="e.g. 1" required aria-required="true">
+                <span class="field__hint">0 – 15 years</span>
+              </div>
+
+              <div class="field">
+                <label for="yearsWithCurrManager" class="field__label field__label--static">Years with Current Manager</label>
+                <input type="number" id="yearsWithCurrManager" name="yearsWithCurrManager" class="field__input" min="0" max="20" placeholder="e.g. 3" required aria-required="true">
+                <span class="field__hint">0 – 20 years</span>
+              </div>
+
+            </div>
+          </fieldset>
+
+          <!-- Predict Button -->
+          <div class="predict-action" data-aos="fade-up" data-aos-delay="100">
+            <button type="submit" class="predict-btn" id="predictBtn" disabled aria-describedby="predict-status">
+              <span class="predict-btn__idle">
+                <i class="fa-solid fa-brain predict-btn__icon" aria-hidden="true"></i>
+                Analyze Employee
+              </span>
+              <span class="predict-btn__loading" aria-hidden="true">
+                <span class="predict-btn__spinner"></span>
+                Processing Analysis
+              </span>
+            </button>
+            <p class="predict-action__note" id="predict-status">
+              All 30 model features required for accurate prediction.
+            </p>
+          </div>
+
+        </form>
+
+        <!-- QUICK INSIGHTS -->
+        <section class="insights-panel" id="insightsPanel" aria-label="Quick Insights" data-aos="fade-up" data-aos-delay="150">
+          <div class="panel-head">
+            <h2 class="panel-head__title"><i class="fa-solid fa-bolt"></i> Quick Insights</h2>
+            <span class="panel-head__tag">Live Observations</span>
+          </div>
+          <div class="insights-grid" id="insightsGrid">
+            <article class="insight-card insight-card--neutral" id="insight-overtime">
+              <div class="insight-card__icon-wrap"><i class="fa-solid fa-clock"></i></div>
+              <div class="insight-card__body">
+                <p class="insight-card__label">Overtime Status</p>
+                <p class="insight-card__value" id="insightOvertimeText">Awaiting input</p>
+              </div>
+              <span class="insight-card__badge insight-card__badge--neutral" id="insightOvertimeBadge">—</span>
+            </article>
+            <article class="insight-card insight-card--neutral" id="insight-compensation">
+              <div class="insight-card__icon-wrap"><i class="fa-solid fa-sack-dollar"></i></div>
+              <div class="insight-card__body">
+                <p class="insight-card__label">Compensation Signal</p>
+                <p class="insight-card__value" id="insightCompText">Awaiting input</p>
+              </div>
+              <span class="insight-card__badge insight-card__badge--neutral" id="insightCompBadge">—</span>
+            </article>
+            <article class="insight-card insight-card--neutral" id="insight-tenure">
+              <div class="insight-card__icon-wrap"><i class="fa-solid fa-calendar-days"></i></div>
+              <div class="insight-card__body">
+                <p class="insight-card__label">Tenure Signal</p>
+                <p class="insight-card__value" id="insightTenureText">Awaiting input</p>
+              </div>
+              <span class="insight-card__badge insight-card__badge--neutral" id="insightTenureBadge">—</span>
+            </article>
+            <article class="insight-card insight-card--neutral" id="insight-satisfaction">
+              <div class="insight-card__icon-wrap"><i class="fa-solid fa-face-smile"></i></div>
+              <div class="insight-card__body">
+                <p class="insight-card__label">Satisfaction Index</p>
+                <p class="insight-card__value" id="insightSatText">Awaiting input</p>
+              </div>
+              <span class="insight-card__badge insight-card__badge--neutral" id="insightSatBadge">—</span>
+            </article>
+          </div>
+        </section>
+
+        <!-- ACTIVITY TIMELINE -->
+        <section class="timeline-section" aria-label="Activity Timeline" data-aos="fade-up" data-aos-delay="200">
+          <div class="panel-head">
+            <h2 class="panel-head__title"><i class="fa-solid fa-timeline"></i> Activity Timeline</h2>
+          </div>
+          <ol class="activity-timeline" id="activityTimeline">
+            <li class="activity-item activity-item--system">
+              <div class="activity-item__dot"></div>
+              <div class="activity-item__content">
+                <p class="activity-item__action">Workspace initialized</p>
+                <time class="activity-item__time" id="initTime">Just now</time>
+              </div>
+            </li>
+            <li class="activity-item activity-item--pending" id="profileCreatedItem" hidden>
+              <div class="activity-item__dot"></div>
+              <div class="activity-item__content">
+                <p class="activity-item__action">Employee profile created</p>
+                <time class="activity-item__time" id="profileCreatedTime">—</time>
+              </div>
+            </li>
+            <li class="activity-item activity-item--pending" id="analysisInitItem" hidden>
+              <div class="activity-item__dot"></div>
+              <div class="activity-item__content">
+                <p class="activity-item__action">Analysis initiated</p>
+                <time class="activity-item__time" id="analysisInitTime">—</time>
+              </div>
+            </li>
+            <li class="activity-item activity-item--pending" id="recGenItem" hidden>
+              <div class="activity-item__dot"></div>
+              <div class="activity-item__content">
+                <p class="activity-item__action">Recommendation generated</p>
+                <time class="activity-item__time" id="recGenTime">—</time>
+              </div>
+            </li>
+          </ol>
+        </section>
+
+      </div><!-- /form-col -->
+
+      <!-- RIGHT: SIDEBAR -->
+      <aside class="workspace__sidebar-col" aria-label="AI Analysis Sidebar">
+
+        <!-- AI Analysis Card -->
+        <div class="analysis-card" id="analysisCard" data-aos="fade-left" data-aos-delay="200">
+          <div class="analysis-card__header">
+            <span class="analysis-card__label">AI Readiness</span>
+            <span class="analysis-card__status" id="readinessStatus">Incomplete</span>
+          </div>
+          <div class="readiness-meter" role="meter" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-label="Profile completion">
+            <div class="readiness-meter__track">
+              <div class="readiness-meter__fill" id="readinessFill" style="width:0%"></div>
+            </div>
+            <span class="readiness-meter__value" id="readinessValue">0%</span>
+          </div>
+          <div class="analysis-indicators">
+            <div class="indicator">
+              <span class="indicator__label">Profile Completion</span>
+              <div class="indicator__bar-wrap">
+                <div class="indicator__bar"><div class="indicator__fill" id="profileFill" style="width:0%"></div></div>
+                <span class="indicator__pct" id="profilePct">0%</span>
+              </div>
+            </div>
+            <div class="indicator">
+              <span class="indicator__label">Risk Readiness</span>
+              <div class="indicator__bar-wrap">
+                <div class="indicator__bar"><div class="indicator__fill" id="riskFill" style="width:0%"></div></div>
+                <span class="indicator__pct" id="riskPct">0%</span>
+              </div>
+            </div>
+            <div class="indicator">
+              <span class="indicator__label">Data Quality</span>
+              <div class="indicator__bar-wrap">
+                <div class="indicator__bar"><div class="indicator__fill indicator__fill--quality" id="qualityFill" style="width:0%"></div></div>
+                <span class="indicator__pct" id="qualityPct">0%</span>
+              </div>
+            </div>
+          </div>
+          <div class="ai-status" id="aiStatus">
+            <div class="ai-status__dot ai-status__dot--idle" id="aiStatusDot"></div>
+            <span class="ai-status__text" id="aiStatusText">Awaiting employee data</span>
+          </div>
+          <!-- Checklist — 5 sections now -->
+          <div class="section-checklist" id="sectionChecklist" aria-label="Section completion">
+            <div class="checklist-item" id="checkA">
+              <span class="checklist-item__icon"><i class="fa-regular fa-circle"></i></span>
+              <span class="checklist-item__label">Personal Info</span>
+              <span class="checklist-item__count" id="checkACount">0/4</span>
+            </div>
+            <div class="checklist-item" id="checkB">
+              <span class="checklist-item__icon"><i class="fa-regular fa-circle"></i></span>
+              <span class="checklist-item__label">Professional Info</span>
+              <span class="checklist-item__count" id="checkBCount">0/8</span>
+            </div>
+            <div class="checklist-item" id="checkC">
+              <span class="checklist-item__icon"><i class="fa-regular fa-circle"></i></span>
+              <span class="checklist-item__label">Compensation</span>
+              <span class="checklist-item__count" id="checkCCount">0/8</span>
+            </div>
+            <div class="checklist-item" id="checkD">
+              <span class="checklist-item__icon"><i class="fa-regular fa-circle"></i></span>
+              <span class="checklist-item__label">Work Environment</span>
+              <span class="checklist-item__count" id="checkDCount">0/5</span>
+            </div>
+            <div class="checklist-item" id="checkE">
+              <span class="checklist-item__icon"><i class="fa-regular fa-circle"></i></span>
+              <span class="checklist-item__label">Tenure &amp; Experience</span>
+              <span class="checklist-item__count" id="checkECount">0/5</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Workforce Snapshot -->
+        <div class="snapshot-widget" data-aos="fade-left" data-aos-delay="300">
+          <div class="panel-head">
+            <h2 class="panel-head__title"><i class="fa-solid fa-layer-group"></i> Workforce Snapshot</h2>
+          </div>
+          <div class="snapshot-grid">
+            <div class="snapshot-item" id="snapDept">
+              <span class="snapshot-item__label">Department Risk</span>
+              <span class="snapshot-item__value" id="snapDeptVal">—</span>
+              <span class="snapshot-item__sub" id="snapDeptSub">Select department</span>
+            </div>
+            <div class="snapshot-item" id="snapComp">
+              <span class="snapshot-item__label">Compensation</span>
+              <span class="snapshot-item__value" id="snapCompVal">—</span>
+              <span class="snapshot-item__sub" id="snapCompSub">Enter income</span>
+            </div>
+            <div class="snapshot-item" id="snapEngage">
+              <span class="snapshot-item__label">Engagement Score</span>
+              <span class="snapshot-item__value" id="snapEngageVal">—</span>
+              <span class="snapshot-item__sub" id="snapEngageSub">Rate satisfaction</span>
+            </div>
+            <div class="snapshot-item" id="snapTenure">
+              <span class="snapshot-item__label">Tenure Category</span>
+              <span class="snapshot-item__value" id="snapTenureVal">—</span>
+              <span class="snapshot-item__sub" id="snapTenureSub">Enter working years</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recommendations Preview -->
+        <div class="recommendations-preview" data-aos="fade-left" data-aos-delay="400">
+          <div class="panel-head">
+            <h2 class="panel-head__title"><i class="fa-solid fa-wand-magic-sparkles"></i> Recommendations</h2>
+            <span class="panel-head__tag panel-head__tag--dim">Preview</span>
+          </div>
+          <div class="rec-list" id="recList">
+            <div class="rec-preview-item" id="recComp">
+              <div class="rec-preview-item__icon"><i class="fa-solid fa-sack-dollar"></i></div>
+              <div class="rec-preview-item__body">
+                <p class="rec-preview-item__title">Compensation Review</p>
+                <p class="rec-preview-item__desc">Benchmark against department peers</p>
+              </div>
+              <span class="rec-preview-item__priority rec-preview-item__priority--med">Med</span>
+            </div>
+            <div class="rec-preview-item" id="recWork">
+              <div class="rec-preview-item__icon"><i class="fa-solid fa-clock"></i></div>
+              <div class="rec-preview-item__body">
+                <p class="rec-preview-item__title">Monitor Workload</p>
+                <p class="rec-preview-item__desc">Track overtime patterns over 30 days</p>
+              </div>
+              <span class="rec-preview-item__priority rec-preview-item__priority--med">Med</span>
+            </div>
+            <div class="rec-preview-item" id="recManager">
+              <div class="rec-preview-item__icon"><i class="fa-solid fa-comments"></i></div>
+              <div class="rec-preview-item__body">
+                <p class="rec-preview-item__title">Manager Check-in</p>
+                <p class="rec-preview-item__desc">Schedule structured 1:1 conversation</p>
+              </div>
+              <span class="rec-preview-item__priority rec-preview-item__priority--low">Low</span>
+            </div>
+          </div>
+          <p class="rec-preview-note"><i class="fa-solid fa-info-circle"></i> Finalized after prediction analysis.</p>
+        </div>
+
+      </aside>
+
+    </div><!-- /workspace__body -->
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.1/aos.js"></script>
+  <script src="prediction.js"></script>
+</body>
+</html>

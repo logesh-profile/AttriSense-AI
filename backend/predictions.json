@@ -1,0 +1,88 @@
+[
+  {
+    "timestamp": "2026-06-19T10:12:57.980419",
+    "prediction": "No",
+    "probability_yes": 41.0,
+    "probability_no": 59.0,
+    "risk_level": "Medium",
+    "age": "45",
+    "department": "Human Resources",
+    "jobRole": "Research Scientist",
+    "gender": "Male",
+    "overtime": "Yes",
+    "monthlyIncome": "2000",
+    "jobSatisfaction": "2",
+    "workLifeBalance": "2",
+    "environmentSatisfaction": "3",
+    "relationshipSatisfaction": null,
+    "yearsAtCompany": "5",
+    "maritalStatus": "Married",
+    "jobLevel": "3",
+    "totalWorkingYears": "1",
+    "top_factors": [
+      {
+        "feature": "MonthlyIncome",
+        "importance": 7.8
+      },
+      {
+        "feature": "OverTime",
+        "importance": 6.9
+      },
+      {
+        "feature": "Age",
+        "importance": 5.7
+      },
+      {
+        "feature": "DailyRate",
+        "importance": 5.3
+      },
+      {
+        "feature": "TotalWorkingYears",
+        "importance": 4.8
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-06-19T14:03:22.928467",
+    "prediction": "No",
+    "probability_yes": 32.0,
+    "probability_no": 68.0,
+    "risk_level": "Low",
+    "age": "30",
+    "department": "Human Resources",
+    "jobRole": "Manufacturing Director",
+    "gender": "Female",
+    "overtime": "Yes",
+    "monthlyIncome": "1222",
+    "jobSatisfaction": "2",
+    "workLifeBalance": "4",
+    "environmentSatisfaction": "2",
+    "relationshipSatisfaction": null,
+    "yearsAtCompany": "5",
+    "maritalStatus": "Married",
+    "jobLevel": "2",
+    "totalWorkingYears": "3",
+    "top_factors": [
+      {
+        "feature": "MonthlyIncome",
+        "importance": 7.8
+      },
+      {
+        "feature": "OverTime",
+        "importance": 6.9
+      },
+      {
+        "feature": "Age",
+        "importance": 5.7
+      },
+      {
+        "feature": "DailyRate",
+        "importance": 5.3
+      },
+      {
+        "feature": "TotalWorkingYears",
+        "importance": 4.8
+      }
+    ]
+  }
+]

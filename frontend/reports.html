@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reports — AttriSense AI</title>
+  <meta name="description" content="Workforce prediction history, exports and compliance records.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23000'/%3E%3Ccircle cx='16' cy='9' r='3' fill='%23fff'/%3E%3Ccircle cx='8' cy='23' r='3' fill='%23fff'/%3E%3Ccircle cx='24' cy='23' r='3' fill='%23fff'/%3E%3Cline x1='16' y1='9' x2='8' y2='23' stroke='%23fff' stroke-width='1.5'/%3E%3Cline x1='16' y1='9' x2='24' y2='23' stroke='%23fff' stroke-width='1.5'/%3E%3Cline x1='8' y1='23' x2='24' y2='23' stroke='%23fff' stroke-width='1.5'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.1/aos.css">
+  <link rel="stylesheet" href="reports.css">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar" id="navbar" role="banner">
+    <div class="navbar__inner">
+      <a href="index.html" class="navbar__logo" aria-label="AttriSense AI home">
+        <svg class="navbar__mark" viewBox="0 0 32 32" aria-hidden="true">
+          <circle cx="16" cy="9" r="2.6"></circle>
+          <circle cx="7"  cy="24" r="2.6"></circle>
+          <circle cx="25" cy="24" r="2.6"></circle>
+          <line x1="16" y1="9"  x2="7"  y2="24"></line>
+          <line x1="16" y1="9"  x2="25" y2="24"></line>
+          <line x1="7"  y1="24" x2="25" y2="24"></line>
+        </svg>
+        <span class="navbar__brand">AttriSense<span class="navbar__brand-ai">AI</span></span>
+      </a>
+      <nav class="navbar__nav" aria-label="Primary navigation">
+        <ul class="navbar__list" role="list">
+          <li><a href="index.html"     class="navbar__link">Home</a></li>
+          <li><a href="predict.html"   class="navbar__link">Prediction</a></li>
+          <li><a href="analytics.html" class="navbar__link">Analytics</a></li>
+          <li><a href="reports.html"   class="navbar__link navbar__link--active" aria-current="page">Reports</a></li>
+          <li><a href="#"              class="navbar__link">Settings</a></li>
+        </ul>
+        <div class="navbar__indicator" id="navIndicator" aria-hidden="true"></div>
+      </nav>
+      <div class="navbar__actions">
+        <button class="navbar__action-btn" aria-label="Search"><i class="fa-solid fa-magnifying-glass"></i></button>
+        <button class="navbar__action-btn" aria-label="Notifications"><i class="fa-regular fa-bell"></i><span class="navbar__notif-dot"></span></button>
+        <button class="navbar__avatar" aria-label="User profile"><span>HR</span></button>
+      </div>
+      <button class="navbar__hamburger" id="navHamburger" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="navbar__mobile-menu" id="mobileMenu" aria-hidden="true">
+      <ul class="navbar__mobile-list" role="list">
+        <li><a href="index.html"     class="navbar__mobile-link">Home</a></li>
+        <li><a href="predict.html"   class="navbar__mobile-link">Prediction</a></li>
+        <li><a href="analytics.html" class="navbar__mobile-link">Analytics</a></li>
+        <li><a href="reports.html"   class="navbar__mobile-link navbar__mobile-link--active">Reports</a></li>
+        <li><a href="#"              class="navbar__mobile-link">Settings</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main class="main" id="main-content">
+
+    <!-- HERO -->
+    <section class="hero" aria-labelledby="heroTitle" data-aos="fade-down" data-aos-duration="500">
+      <div class="hero__left">
+        <p class="hero__eyebrow">Prediction History</p>
+        <h1 class="hero__title" id="heroTitle">Reports</h1>
+        <p class="hero__sub">Complete log of every employee attrition prediction stored in the database.</p>
+      </div>
+      <div class="hero__right">
+        <div class="hero__meta" id="heroMeta">
+          <div class="hero__meta-item">
+            <span class="hero__meta-label">Last Prediction</span>
+            <span class="hero__meta-value" id="lastPredTime">—</span>
+          </div>
+          <div class="hero__meta-divider"></div>
+          <div class="hero__meta-item">
+            <span class="hero__meta-label">Sync Status</span>
+            <span class="hero__meta-value hero__meta-value--live">
+              <span class="live-dot"></span>Live
+            </span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- KPI CARDS (all real data from /analytics-data) -->
+    <section class="kpi-grid" aria-label="Report overview" data-aos="fade-up" data-aos-delay="80">
+      <article class="kpi-card">
+        <div class="kpi-card__top">
+          <span class="kpi-card__label">Total Predictions</span>
+          <span class="kpi-card__icon"><i class="fa-solid fa-database"></i></span>
+        </div>
+        <span class="kpi-card__value" id="kpiTotal">—</span>
+        <span class="kpi-card__sub">All time</span>
+      </article>
+      <article class="kpi-card kpi-card--risk">
+        <div class="kpi-card__top">
+          <span class="kpi-card__label">Attrition Predicted</span>
+          <span class="kpi-card__icon"><i class="fa-solid fa-triangle-exclamation"></i></span>
+        </div>
+        <span class="kpi-card__value" id="kpiAttrition">—</span>
+        <span class="kpi-card__sub" id="kpiAttritionRate">—% of total</span>
+      </article>
+      <article class="kpi-card kpi-card--safe">
+        <div class="kpi-card__top">
+          <span class="kpi-card__label">Retention Predicted</span>
+          <span class="kpi-card__icon"><i class="fa-solid fa-shield-halved"></i></span>
+        </div>
+        <span class="kpi-card__value" id="kpiRetention">—</span>
+        <span class="kpi-card__sub" id="kpiRetentionRate">—% of total</span>
+      </article>
+      <article class="kpi-card">
+        <div class="kpi-card__top">
+          <span class="kpi-card__label">High Risk Employees</span>
+          <span class="kpi-card__icon"><i class="fa-solid fa-circle-exclamation"></i></span>
+        </div>
+        <span class="kpi-card__value" id="kpiHighRisk">—</span>
+        <span class="kpi-card__sub">Probability ≥ 70%</span>
+      </article>
+    </section>
+
+    <!-- EXPORT BAR -->
+    <div class="export-bar" data-aos="fade-up" data-aos-delay="100">
+      <p class="export-bar__label">Export prediction data:</p>
+      <div class="export-bar__actions">
+        <button class="export-btn" id="exportCsvBtn" title="Download all predictions as CSV">
+          <i class="fa-solid fa-file-csv"></i> Export CSV
+        </button>
+        <button class="export-btn export-btn--high" id="exportHighRiskBtn" title="Download high-risk employees only">
+          <i class="fa-solid fa-triangle-exclamation"></i> High Risk Only
+        </button>
+      </div>
+    </div>
+
+    <!-- FILTER BAR -->
+    <div class="filter-bar" id="filterBar" data-aos="fade-up" data-aos-delay="120">
+      <div class="filter-bar__left">
+        <div class="search-wrap">
+          <i class="fa-solid fa-magnifying-glass search-wrap__icon"></i>
+          <input type="text" id="searchInput" class="search-input" placeholder="Search department, role…" aria-label="Search predictions">
+        </div>
+        <div class="filter-group">
+          <select id="riskFilter" class="filter-select" aria-label="Filter by risk level">
+            <option value="all">All Risk Levels</option>
+            <option value="High">High Risk</option>
+            <option value="Medium">Medium Risk</option>
+            <option value="Low">Low Risk</option>
+          </select>
+          <select id="deptFilter" class="filter-select" aria-label="Filter by department">
+            <option value="all">All Departments</option>
+          </select>
+          <select id="predFilter" class="filter-select" aria-label="Filter by prediction">
+            <option value="all">All Predictions</option>
+            <option value="Yes">Attrition: Yes</option>
+            <option value="No">Attrition: No</option>
+          </select>
+        </div>
+      </div>
+      <div class="filter-bar__right">
+        <span class="filter-bar__count" id="filterCount">— records</span>
+        <button class="btn-clear" id="clearFilters">
+          <i class="fa-solid fa-xmark"></i> Clear
+        </button>
+      </div>
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-wrap" id="tableWrap" data-aos="fade-up" data-aos-delay="140">
+      <table class="records-table" aria-label="Prediction history">
+        <thead>
+          <tr>
+            <th class="col-id">#</th>
+            <th class="sortable" data-col="timestamp">Time <i class="fa-solid fa-sort"></i></th>
+            <th>Result</th>
+            <th class="sortable" data-col="risk_level">Risk <i class="fa-solid fa-sort"></i></th>
+            <th class="sortable" data-col="probability_yes">Probability <i class="fa-solid fa-sort"></i></th>
+            <th class="sortable" data-col="department">Department <i class="fa-solid fa-sort"></i></th>
+            <th>Job Role</th>
+            <th class="sortable" data-col="age">Age <i class="fa-solid fa-sort"></i></th>
+            <th>Gender</th>
+            <th class="sortable" data-col="monthly_income">Income <i class="fa-solid fa-sort"></i></th>
+            <th>Overtime</th>
+            <th>Tenure</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+          <tr>
+            <td colspan="12">
+              <div class="table-loader">
+                <span class="table-loader__spinner"></span> Loading predictions…
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- EMPTY STATE -->
+    <div class="empty-state" id="emptyState" hidden>
+      <div class="empty-state__icon">⬡</div>
+      <h2 class="empty-state__title">No prediction data available</h2>
+      <p class="empty-state__desc">
+        Run your first employee analysis on the
+        <a href="predict.html">Prediction page</a>.
+        All results will appear here automatically.
+      </p>
+    </div>
+
+    <!-- PAGINATION -->
+    <div class="pagination" id="pagination" hidden>
+      <button class="pagination__btn" id="prevBtn" disabled aria-label="Previous page">
+        <i class="fa-solid fa-chevron-left"></i>
+      </button>
+      <div class="pagination__pages" id="pageButtons"></div>
+      <button class="pagination__btn" id="nextBtn" disabled aria-label="Next page">
+        <i class="fa-solid fa-chevron-right"></i>
+      </button>
+    </div>
+
+    <!-- DEPT BREAKDOWN (real data) -->
+    <section class="breakdown-section" id="breakdownSection" aria-label="Department breakdown" data-aos="fade-up" hidden>
+      <div class="section-head">
+        <div>
+          <p class="section-head__eyebrow">Breakdown</p>
+          <h2 class="section-head__title">Department Summary</h2>
+        </div>
+      </div>
+      <div class="breakdown-grid" id="breakdownGrid"></div>
+    </section>
+
+    <!-- RECENT ACTIVITY (real predictions as feed) -->
+    <section class="activity-section" aria-label="Recent activity" data-aos="fade-up">
+      <div class="section-head">
+        <div>
+          <p class="section-head__eyebrow">System Log</p>
+          <h2 class="section-head__title">Recent Predictions</h2>
+        </div>
+        <span class="section-head__badge">
+          <span class="live-dot"></span> Live Feed
+        </span>
+      </div>
+      <ol class="activity-feed" id="activityFeed" aria-label="Recent prediction activity">
+        <li class="activity-feed__loading">Loading…</li>
+      </ol>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer" role="contentinfo">
+    <div class="footer__inner">
+      <div class="footer__left">
+        <a href="index.html" class="footer__logo">
+          <svg viewBox="0 0 32 32" class="footer__mark" aria-hidden="true">
+            <circle cx="16" cy="9" r="2.6"></circle><circle cx="7" cy="24" r="2.6"></circle><circle cx="25" cy="24" r="2.6"></circle>
+            <line x1="16" y1="9" x2="7" y2="24"></line><line x1="16" y1="9" x2="25" y2="24"></line><line x1="7" y1="24" x2="25" y2="24"></line>
+          </svg>
+          AttriSense<span>AI</span>
+        </a>
+        <p class="footer__copy">&copy; 2026 AttriSense AI. Enterprise HR Intelligence.</p>
+      </div>
+      <div class="footer__right">
+        <span class="footer__status"><span class="live-dot"></span>All systems operational</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast -->
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.1/aos.js"></script>
+  <script src="reports.js"></script>
+</body>
+</html>
